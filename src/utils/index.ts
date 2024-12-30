@@ -1,4 +1,4 @@
-import type { BaseLiquor } from '@/data/recipes';
+import type { BaseLiquor } from '@/schema/recipe';
 
 export const groupBy = <T, K extends string | number | symbol>(
 	arr: T[],

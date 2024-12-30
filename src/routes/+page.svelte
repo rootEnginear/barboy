@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { RECIPES, type Recipe } from '@/data/recipes';
+	import { RECIPES } from '@/data/recipes';
+	import { RecipeSchema, type Recipe } from '@/schema/recipe';
 	import { getLiquorColor, groupBy } from '@/utils';
 	import { persisted } from 'svelte-persisted-store';
 	import { flip } from 'svelte/animate';
 	import { twMerge } from 'tailwind-merge';
+	import { array, safeParse } from 'valibot';
 
 	interface Order {
 		orderId: number;
@@ -43,7 +45,10 @@
 
 	const onFileReaderLoad = (event: ProgressEvent<FileReader>) => {
 		if (!event.target || typeof event.target.result !== 'string') return;
-		$recipes = JSON.parse(event.target.result);
+		const parsedJSON = JSON.parse(event.target.result);
+		const validated = safeParse(array(RecipeSchema), parsedJSON);
+		if (!validated.success) return;
+		$recipes = validated.output;
 	};
 
 	const onFileChange = (event: Event) => {

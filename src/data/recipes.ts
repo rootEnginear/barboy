@@ -1,16 +1,4 @@
-export const BASE_LIQUORS = ['Vodka', 'Gin', 'Rum', 'Tequila', 'Whiskey', 'Other'] as const;
-export type BaseLiquor = (typeof BASE_LIQUORS)[number];
-
-export interface Recipe {
-	name: string;
-	base: BaseLiquor;
-	method: string;
-	glass: string;
-	ice: string | false;
-	steps: string[];
-	top?: string;
-	garnish?: string;
-}
+import type { Recipe } from '@/schema/recipe';
 
 export const RECIPES: Recipe[] = [
 	{
