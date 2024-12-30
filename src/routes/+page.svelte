@@ -23,12 +23,35 @@
 			.map(([name, orders]) => [name, orders.length] as [string, number])
 			.sort((a, b) => b[1] - a[1])
 	);
+
+	let sortAlgo: 'index' | 'most-sold' | 'least-sold' = $state('index');
+	let soldCount = $derived(
+		Object.fromEntries(
+			Object.entries(groupBy($doneOrders, (order) => order.recipe.name)).map(
+				([name, orders]) => [name, orders.length] as [string, number]
+			)
+		)
+	);
+	let sortedRecipes = $derived.by(() => {
+		if (sortAlgo === 'index') return RECIPES;
+		const sorted = [...RECIPES].sort((a, b) => soldCount[b.name] - soldCount[a.name]);
+		if (sortAlgo === 'most-sold') return sorted;
+		return sorted.reverse();
+	});
 </script>
 
 <div class="flex h-svh select-none gap-16 bg-black p-16">
 	<div class="flex w-[150px] shrink-0 flex-col gap-8 overflow-y-auto bg-white p-8">
-		{#each RECIPES as recipe (recipe.name)}
-			<div class="relative flex aspect-square items-center justify-center bg-blue-50 p-8">
+		<select bind:value={sortAlgo}>
+			<option value="index">Index</option>
+			<option value="most-sold">Most Sold</option>
+			<option value="least-sold">Least Sold</option>
+		</select>
+		{#each sortedRecipes as recipe (recipe.name)}
+			<div
+				class="relative flex aspect-square items-center justify-center bg-blue-50 p-8"
+				animate:flip={{ duration: 200 }}
+			>
 				{recipe.name}
 				<button
 					type="button"
