@@ -15,6 +15,9 @@ const config = {
 		alias: {
 			'@': './src',
 			'@/*': './src/*'
+		},
+		paths: {
+			base: process.argv.includes('dev') ? '' : 'https://rootenginear.github.io'
 		}
 	}
 };
