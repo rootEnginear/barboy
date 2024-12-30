@@ -98,7 +98,7 @@
 				{/each}
 			</div>
 		</div>
-		<div class="absolute bottom-0 left-0 flex w-full justify-between">
+		<div class="absolute bottom-0 left-0 flex w-full items-end justify-between">
 			<label class="block cursor-pointer bg-white p-8 underline decoration-dashed"
 				>Load<input class="hidden" type="file" accept=".json" onchange={onFileChange} /></label
 			>
