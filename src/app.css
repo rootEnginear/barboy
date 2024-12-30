@@ -1,3 +1,30 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+@layer base {
+	*,
+	::before,
+	::after {
+		@apply relative;
+	}
+
+	html {
+		/* color-scheme: dark; */
+		@apply overflow-x-clip scroll-smooth text-pretty tabular-nums antialiased;
+		/* https://kilianvalkhof.com/2022/css-html/your-css-reset-needs-text-size-adjust-probably/ */
+		-moz-text-size-adjust: none;
+		-webkit-text-size-adjust: none;
+		text-size-adjust: none;
+	}
+
+	body {
+		@apply min-h-svh;
+	}
+}
+
+@layer utilities {
+	.nobr {
+		white-space: nowrap;
+	}
+}

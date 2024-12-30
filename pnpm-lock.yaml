@@ -42,7 +42,7 @@ importers:
         specifier: ^3.2.6
         version: 3.3.2(prettier@3.4.2)(svelte@5.16.0)
       prettier-plugin-tailwindcss:
-        specifier: ^0.6.5
+        specifier: ^0.6.9
         version: 0.6.9(prettier-plugin-svelte@3.3.2(prettier@3.4.2)(svelte@5.16.0))(prettier@3.4.2)
       svelte:
         specifier: ^5.0.0
@@ -51,7 +51,7 @@ importers:
         specifier: ^4.0.0
         version: 4.1.1(svelte@5.16.0)(typescript@5.7.2)
       tailwindcss:
-        specifier: ^3.4.9
+        specifier: ^3.4.17
         version: 3.4.17
       typescript:
         specifier: ^5.0.0
