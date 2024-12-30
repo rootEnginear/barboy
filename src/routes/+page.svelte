@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { RECIPES, type Recipe } from '@/data/recipes';
+	import { groupBy } from '@/utils';
 	import { persisted } from 'svelte-persisted-store';
 	import { flip } from 'svelte/animate';
 
@@ -14,6 +15,12 @@
 	let currentOrderIndex = $derived(
 		[...$todoOrders, ...$doneOrders].reduce((max, current) => Math.max(max, current.orderId), -1) +
 			1
+	);
+
+	let sameOrderCount = $derived(
+		Object.entries(groupBy($todoOrders, (order) => order.recipe.name))
+			.map(([name, orders]) => [name, orders.length] as [string, number])
+			.sort((a, b) => b[1] - a[1])
 	);
 </script>
 
@@ -40,49 +47,65 @@
 			</div>
 		{/each}
 	</div>
-	<div
-		class="flex min-w-0 flex-1 flex-row-reverse flex-wrap content-start items-start gap-8 overflow-y-auto bg-white p-8"
-	>
-		{#each $todoOrders as order, idx (order.orderId)}
-			{@const recipe = order.recipe}
-			<button
-				type="button"
-				class="flex w-[200px] flex-col items-stretch bg-yellow-50 p-8 text-left first:border-4 first:border-red-500 first:bg-red-100"
-				onclick={() => {
-					$todoOrders.splice(idx, 1);
-					$todoOrders = $todoOrders;
-					$doneOrders = [...$doneOrders, order];
-				}}
-				animate:flip={{ duration: 200 }}
+	<div class="relative min-w-0 flex-1 bg-white">
+		<div class="h-full overflow-y-auto">
+			<div
+				class="flex min-w-0 flex-1 flex-row-reverse flex-wrap content-start items-start gap-8 p-8"
 			>
-				<span class="text-lg font-bold">{recipe.name}</span>
-				<span class="flex justify-between gap-4 text-sm text-gray-500">
-					<span>{recipe.method}</span>
-					<span>{recipe.glass}</span>
-				</span>
-				<hr class="my-2" />
-				<ol class="ml-[2ch] list-disc">
-					{#each recipe.steps as step}
-						<li>{step}</li>
-					{/each}
-				</ol>
-				<hr class="my-2" />
-				<span class="flex justify-between gap-4">
-					<span>{recipe.ice}</span>
-					<span>{recipe.top}</span>
-				</span>
-				<span>{recipe.garnish}</span>
-				<hr class="my-2" />
-				{#if order.name}
-					<span class="flex justify-between gap-4 text-sm text-gray-500">
-						<span>{order.name}</span>
-						<span>#{order.orderId}</span>
-					</span>
-				{:else}
-					<span class="text-right text-sm text-gray-500">#{order.orderId}</span>
-				{/if}
-			</button>
-		{/each}
+				{#each $todoOrders as order, idx (order.orderId)}
+					{@const recipe = order.recipe}
+					<button
+						type="button"
+						class="flex w-[200px] flex-col items-stretch bg-yellow-50 p-8 text-left first:border-4 first:border-red-500 first:bg-red-100"
+						onclick={() => {
+							$todoOrders.splice(idx, 1);
+							$todoOrders = $todoOrders;
+							$doneOrders = [...$doneOrders, order];
+						}}
+						animate:flip={{ duration: 200 }}
+					>
+						<span class="text-lg font-bold">{recipe.name}</span>
+						<span class="flex justify-between gap-4 text-sm text-gray-500">
+							<span>{recipe.method}</span>
+							<span>{recipe.glass}</span>
+						</span>
+						<hr class="my-2" />
+						<ol class="ml-[2ch] list-disc">
+							{#each recipe.steps as step}
+								<li>{step}</li>
+							{/each}
+						</ol>
+						<hr class="my-2" />
+						<span class="flex justify-between gap-4">
+							<span>{recipe.ice}</span>
+							<span>{recipe.top}</span>
+						</span>
+						<span>{recipe.garnish}</span>
+						<hr class="my-2" />
+						{#if order.name}
+							<span class="flex justify-between gap-4 text-sm text-gray-500">
+								<span>{order.name}</span>
+								<span>#{order.orderId}</span>
+							</span>
+						{:else}
+							<span class="text-right text-sm text-gray-500">#{order.orderId}</span>
+						{/if}
+					</button>
+				{/each}
+			</div>
+		</div>
+		<ol class="absolute bottom-0 right-0 flex flex-col items-end bg-white p-8">
+			{#each sameOrderCount as [orderName, count] (orderName)}
+				<li class="first:text-lg first:font-bold first:text-red-500">{orderName} x{count}</li>
+			{/each}
+		</ol>
+		<button
+			type="button"
+			class="absolute bottom-0 left-0 bg-white p-8 underline"
+			ondblclick={() => {
+				if (confirm('Clear?')) $todoOrders = [];
+			}}>Clear</button
+		>
 	</div>
 	<div class="relative w-[150px] shrink-0 bg-white">
 		<div class="h-full overflow-y-auto">
@@ -91,6 +114,7 @@
 					{@const recipe = order.recipe}
 					<div
 						class="relative flex aspect-square flex-col items-center justify-center bg-green-50 p-8 text-center"
+						animate:flip={{ duration: 200 }}
 					>
 						<span>{recipe.name}</span>
 						<span class="flex w-full justify-between gap-4 text-sm text-gray-500">
@@ -121,11 +145,13 @@
 		</div>
 		<button
 			type="button"
-			class="absolute bottom-0 left-0 p-8 underline"
+			class="absolute bottom-0 left-0 bg-white p-8 underline"
 			ondblclick={() => {
 				if (confirm('Clear?')) $doneOrders = [];
 			}}>Clear</button
 		>
-		<span class="absolute bottom-8 right-8 text-sm text-gray-500">Total: {$doneOrders.length}</span>
+		<span class="absolute bottom-0 right-0 bg-white p-8 text-sm text-gray-500"
+			>Total: {$doneOrders.length}</span
+		>
 	</div>
 </div>

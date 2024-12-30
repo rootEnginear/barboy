@@ -11,7 +11,7 @@
 
 	html {
 		/* color-scheme: dark; */
-		@apply overflow-x-clip scroll-smooth text-pretty tabular-nums antialiased;
+		@apply overflow-x-clip scroll-smooth text-pretty antialiased;
 		/* https://kilianvalkhof.com/2022/css-html/your-css-reset-needs-text-size-adjust-probably/ */
 		-moz-text-size-adjust: none;
 		-webkit-text-size-adjust: none;
