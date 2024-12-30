@@ -38,7 +38,9 @@
 	);
 	let sortedRecipes = $derived.by(() => {
 		if (sortAlgo === 'index') return $recipes;
-		const sorted = [...$recipes].sort((a, b) => soldCount[b.name] - soldCount[a.name]);
+		const sorted = [...$recipes].sort(
+			(a, b) => (soldCount[b.name] ?? 0) - (soldCount[a.name] ?? 0)
+		);
 		if (sortAlgo === 'most-sold') return sorted;
 		return sorted.reverse();
 	});
