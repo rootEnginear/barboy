@@ -17,7 +17,7 @@ const config = {
 			'@/*': './src/*'
 		},
 		paths: {
-			base: process.argv.includes('dev') ? '' : 'https://rootenginear.github.io'
+			base: process.argv.includes('dev') ? '' : '/barboy'
 		}
 	}
 };
