@@ -102,14 +102,35 @@
 				{/each}
 			</div>
 		</div>
-		<ol class="absolute bottom-0 right-0 flex flex-col items-end bg-white p-8">
-			{#each sameOrderCount as [orderName, count] (orderName)}
-				<li class="first:text-lg first:font-bold first:text-red-500">{orderName} x{count}</li>
-			{/each}
-		</ol>
+		<div class="absolute bottom-0 right-0 flex flex-col items-end">
+			<ol class="flex flex-col items-end bg-white p-8">
+				{#each sameOrderCount as [orderName, count] (orderName)}
+					<li
+						class={orderName === $todoOrders[0].recipe.name
+							? 'text-lg font-bold text-red-500'
+							: 'first:text-orange-500'}
+					>
+						{orderName} x{count}
+					</li>
+				{/each}
+			</ol>
+			<button
+				type="button"
+				class="bg-white p-8 underline decoration-double"
+				ondblclick={() => {
+					$doneOrders = [
+						...$doneOrders,
+						...$todoOrders.filter((order) => order.recipe.name === $todoOrders[0].recipe.name)
+					];
+					$todoOrders = $todoOrders.filter(
+						(order) => order.recipe.name !== $todoOrders[0].recipe.name
+					);
+				}}>Clear Group</button
+			>
+		</div>
 		<button
 			type="button"
-			class="absolute bottom-0 left-0 bg-white p-8 underline"
+			class="absolute bottom-0 left-0 bg-white p-8 underline decoration-double"
 			ondblclick={() => {
 				if (confirm('Clear?')) $todoOrders = [];
 			}}>Clear</button
@@ -142,7 +163,7 @@
 						</button>
 						<button
 							type="button"
-							class="absolute left-0 top-0 flex items-center justify-center p-8 text-sm text-gray-500 underline"
+							class="absolute left-0 top-0 flex items-center justify-center p-8 text-sm text-gray-500 underline decoration-double"
 							ondblclick={() => {
 								if (confirm('Clear?')) $doneOrders.splice(idx, 1);
 							}}>X</button
@@ -153,7 +174,7 @@
 		</div>
 		<button
 			type="button"
-			class="absolute bottom-0 left-0 bg-white p-8 underline"
+			class="absolute bottom-0 left-0 bg-white p-8 underline decoration-double"
 			ondblclick={() => {
 				if (confirm('Clear?')) $doneOrders = [];
 			}}>Clear</button
