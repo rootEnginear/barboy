@@ -8,8 +8,6 @@
 		recipe: Recipe;
 	}
 
-	let isSkipName = $state(false);
-
 	let todoOrders: Order[] = $state([]);
 	let doneOrders: Order[] = $state([]);
 	let currentOrderIndex = $derived(todoOrders.length + doneOrders.length);
@@ -17,19 +15,25 @@
 
 <div class="flex h-svh select-none gap-16 bg-black p-16">
 	<div class="flex w-[150px] shrink-0 flex-col gap-8 overflow-y-auto bg-white p-8">
-		<label><input type="checkbox" bind:checked={isSkipName} /> Skip name</label>
 		{#each RECIPES as recipe (recipe.name)}
-			<button
-				type="button"
-				class="aspect-square bg-blue-50 p-8"
-				onclick={() => {
-					let name = null;
-					if (!isSkipName) name = prompt('What is your name?');
-					todoOrders.push({ orderId: currentOrderIndex, name, recipe });
-				}}
-				ondblclick={() => todoOrders.push({ orderId: currentOrderIndex, name: null, recipe })}
-				>{recipe.name}</button
-			>
+			<div class="relative flex aspect-square items-center justify-center bg-blue-50 p-8">
+				{recipe.name}
+				<button
+					type="button"
+					class="absolute left-0 top-0 flex h-full w-1/2 items-end bg-black/10 text-xs/1 opacity-50"
+					onclick={() => {
+						const name = prompt('Name');
+						todoOrders.push({ orderId: currentOrderIndex, name, recipe });
+					}}>name</button
+				>
+				<button
+					type="button"
+					class="absolute right-0 top-0 flex h-full w-1/2 items-end justify-end text-xs/1 opacity-50"
+					onclick={() => {
+						todoOrders.push({ orderId: currentOrderIndex, name: null, recipe });
+					}}>noname</button
+				>
+			</div>
 		{/each}
 	</div>
 	<div
