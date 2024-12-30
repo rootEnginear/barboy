@@ -24,7 +24,7 @@
 				{recipe.name}
 				<button
 					type="button"
-					class="absolute left-0 top-0 flex h-full w-1/2 items-end bg-black/10 text-xs/1 opacity-50"
+					class="absolute left-0 top-0 flex h-full w-1/2 items-end bg-black/10 p-8 text-xs/1 opacity-50"
 					onclick={() => {
 						const name = prompt('Name');
 						$todoOrders = [...$todoOrders, { orderId: currentOrderIndex, name, recipe }];
@@ -32,7 +32,7 @@
 				>
 				<button
 					type="button"
-					class="absolute right-0 top-0 flex h-full w-1/2 items-end justify-end text-xs/1 opacity-50"
+					class="absolute right-0 top-0 flex h-full w-1/2 items-end justify-end p-8 text-xs/1 opacity-50"
 					onclick={() => {
 						$todoOrders = [...$todoOrders, { orderId: currentOrderIndex, name: null, recipe }];
 					}}>noname</button
@@ -84,37 +84,41 @@
 			</button>
 		{/each}
 	</div>
-	<div
-		class="relative flex w-[150px] shrink-0 flex-col-reverse justify-end gap-8 overflow-y-auto bg-white p-8"
-	>
-		{#each $doneOrders as order, idx (order.orderId)}
-			{@const recipe = order.recipe}
-			<div class="relative flex aspect-square flex-col items-center justify-center bg-green-50 p-8">
-				<span>{recipe.name}</span>
-				<span class="flex w-full justify-between gap-4 text-sm text-gray-500">
-					<span>{order.name}</span>
-					<span>#{order.orderId}</span>
-				</span>
-				<button
-					type="button"
-					class="absolute left-0 top-0 size-full"
-					onclick={() => {
-						$doneOrders.splice(idx, 1);
-						$doneOrders = $doneOrders;
-						$todoOrders = [order, ...$todoOrders];
-					}}
-					aria-label="move to todo"
-				>
-				</button>
-				<button
-					type="button"
-					class="absolute left-0 top-0 flex size-48 items-center justify-center text-sm text-gray-500 underline"
-					ondblclick={() => {
-						if (confirm('Clear?')) $doneOrders.splice(idx, 1);
-					}}>X</button
-				>
+	<div class="relative w-[150px] shrink-0 bg-white">
+		<div class="h-full overflow-y-auto">
+			<div class="flex flex-col-reverse justify-end gap-8 p-8">
+				{#each $doneOrders as order, idx (order.orderId)}
+					{@const recipe = order.recipe}
+					<div
+						class="relative flex aspect-square flex-col items-center justify-center bg-green-50 p-8 text-center"
+					>
+						<span>{recipe.name}</span>
+						<span class="flex w-full justify-between gap-4 text-sm text-gray-500">
+							<span>{order.name}</span>
+							<span>#{order.orderId}</span>
+						</span>
+						<button
+							type="button"
+							class="absolute left-0 top-0 size-full"
+							onclick={() => {
+								$doneOrders.splice(idx, 1);
+								$doneOrders = $doneOrders;
+								$todoOrders = [order, ...$todoOrders];
+							}}
+							aria-label="move to todo"
+						>
+						</button>
+						<button
+							type="button"
+							class="absolute left-0 top-0 flex items-center justify-center p-8 text-sm text-gray-500 underline"
+							ondblclick={() => {
+								if (confirm('Clear?')) $doneOrders.splice(idx, 1);
+							}}>X</button
+						>
+					</div>
+				{/each}
 			</div>
-		{/each}
+		</div>
 		<button
 			type="button"
 			class="absolute bottom-0 left-0 p-8 underline"
@@ -122,5 +126,6 @@
 				if (confirm('Clear?')) $doneOrders = [];
 			}}>Clear</button
 		>
+		<span class="absolute bottom-8 right-8 text-sm text-gray-500">Total: {$doneOrders.length}</span>
 	</div>
 </div>
