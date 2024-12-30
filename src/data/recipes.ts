@@ -26,5 +26,14 @@ export const RECIPES: Recipe[] = [
 		steps: ['1/2 Lime, squeezed and thrown into the glass', '2oz Gin'],
 		top: 'Soda',
 		garnish: 'Lime wedge'
+	},
+	{
+		name: 'Screwdriver',
+		method: 'Build',
+		glass: 'Highball',
+		ice: 'Cubes',
+		steps: ['2 Vodka'],
+		top: 'OJ',
+		garnish: 'Orange'
 	}
 ];

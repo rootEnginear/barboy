@@ -3,6 +3,7 @@
 	import { groupBy } from '@/utils';
 	import { persisted } from 'svelte-persisted-store';
 	import { flip } from 'svelte/animate';
+	import { twMerge } from 'tailwind-merge';
 
 	interface Order {
 		orderId: number;
@@ -56,7 +57,14 @@
 					{@const recipe = order.recipe}
 					<button
 						type="button"
-						class="flex w-[200px] flex-col items-stretch bg-yellow-50 p-8 text-left first:border-4 first:border-red-500 first:bg-red-100"
+						class={twMerge(
+							'flex w-[200px] flex-col items-stretch p-8 text-left first:border-4 first:border-red-500 first:bg-red-100',
+							recipe.name === $todoOrders[0].recipe.name
+								? 'border-2 border-dashed border-red-300 bg-red-50'
+								: recipe.name === sameOrderCount[0][0]
+									? 'bg-orange-50'
+									: 'bg-yellow-50'
+						)}
 						onclick={() => {
 							$todoOrders.splice(idx, 1);
 							$todoOrders = $todoOrders;
